@@ -1,0 +1,36 @@
+version: '3.4'
+
+services:
+  Dropbox.db:
+    image: postgres
+    hostname: Dropbox.db
+    container_name: Dropbox.db
+    volumes:      
+      - dropbox_db_data:/var/lib/postgresql/data
+    restart: always
+    expose:
+      - 5432
+    ports:
+      - 5438:5432
+    environment:
+      - POSTGRES_PASSWORD=SuperStrongP455word!
+
+  Dropbox.api:
+    image: ${DOCKER_REGISTRY-}dropbox.api    
+    environment:
+      - ASPNETCORE_URLS=http://+:5066
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=Dropbox.db;Database=app_dropbox_db;User Id=postgres;Password=SuperStrongP455word!;Include Error Detail=true
+    expose:
+      - 5055
+    ports:
+      - 5066:5066
+    build:
+      context: .
+      dockerfile: Dropbox.API/Dockerfile
+    depends_on:
+      - Dropbox.db
+
+
+volumes: 
+  dropbox_db_data:
