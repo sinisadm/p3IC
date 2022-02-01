@@ -34,6 +34,13 @@ namespace Dropbox.API.Controllers
             return Ok(await _mediator.Send(new GetItemQuery(itemId)));
         }
 
+        [HttpGet("file")]
+        [ProducesResponseType(typeof(PageableCollection<ItemDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetFiles(Guid userDeviceId, Guid? parentItemId, string name, [FromQuery] QueryOptions queryOptions)
+        {
+            var specification = new FileSpecification(userDeviceId, parentItemId, name);
+            return Ok(await _mediator.Send(new GetFilesQuery(specification, queryOptions)));
+        }
         [HttpPost("file")]
         [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateFile(CreateFileCommand command)
