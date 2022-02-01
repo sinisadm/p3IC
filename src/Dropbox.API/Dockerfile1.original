@@ -1,0 +1,25 @@
+#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+
+FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+WORKDIR /src
+COPY ["app/Dropbox.API/Dropbox.API.csproj", "app/Dropbox.API/"]
+COPY ["app/Dropbox.Infrastructure/Dropbox.Infrastructure.csproj", "app/Dropbox.Infrastructure/"]
+COPY ["app/Dropbox.Application/Dropbox.Application.csproj", "app/Dropbox.Application/"]
+COPY ["app/Dropbox.Domain/Dropbox.Domain.csproj", "app/Dropbox.Domain/"]
+RUN dotnet restore "app/Dropbox.API/Dropbox.API.csproj"
+COPY . .
+WORKDIR "/src/app/Dropbox.API"
+RUN dotnet build "Dropbox.API.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "Dropbox.API.csproj" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "Dropbox.API.dll"]

@@ -3,7 +3,7 @@
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
-    <ProjectGuid>cf3f2c9c-2743-4105-acb1-de38d6c4d09f</ProjectGuid>
+    <ProjectGuid>9a200335-fba7-4258-98b6-5535f5c06ca8</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
     <DockerServiceName>dropbox.api</DockerServiceName>

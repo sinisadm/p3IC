@@ -27,7 +27,7 @@ services:
       - 5066:5066
     build:
       context: .
-      dockerfile: Dropbox.API/Dockerfile
+      dockerfile: src/Dropbox.API/Dockerfile
     depends_on:
       - Dropbox.db
 
